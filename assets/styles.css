@@ -31,11 +31,15 @@ body {
 
 }
 
-.tab {
+#drag {
+    position: absolute;
+    top: calc(50% - 150px);
+    left: calc(50% - 150px);
     width: 300px;
     height: 300px;
     border: 1px solid var(--primary-colour);
     border-radius: 10px;
+    cursor: grab;
 }
 
 .tab > header {
