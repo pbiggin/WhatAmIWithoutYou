@@ -53,3 +53,43 @@ function dragElement(elmnt) {
 }
 
 /* end borrowed code */
+
+const card = document.getElementById("drag");
+const messageEl = card.querySelector(".spoken");
+
+let currentEvent = 0;
+
+const events = [
+  introduction,
+  eventThree,
+];
+
+
+function introduction(done) {
+  updateCardText("Hello... There");
+}
+
+function eventThree(done) {
+  updateCardText("Proposal 3");
+  done();
+}
+
+function updateCardText(text) {
+  messageEl.textContent = text;
+}
+
+let isProcessing = false;
+
+function runNextEvent() {
+  if (currentEvent >= events.length) return;
+  const next = events[currentEvent];
+  currentEvent += 1;
+  next(runNextEvent);
+}
+
+window.addEventListener("focus", () => {
+  if (isProcessing) return;
+  isProcessing = true;
+  runNextEvent();
+  setTimeout(() => { isProcessing = false; }, 100);
+});
