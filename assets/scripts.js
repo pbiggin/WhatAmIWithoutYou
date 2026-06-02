@@ -106,6 +106,17 @@ function waitForBlur() {
   });
 }
 
+function callBack() {
+  const audio = new Audio('assets/bell.mp3');
+
+  audio.play().catch(() => {});
+  const timer = setInterval(() => {
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }, 3000);
+
+  return waitForFocus().finally(() => clearInterval(timer));
+}
 
 /* end lookouts */
 
@@ -132,8 +143,6 @@ const Event1 = [
   "...",
   "I need to change the page a bit",
 ]
-
-const callBack = new Audio('assets/bell.mp3');
 
 
 async function introduction(done) {
@@ -169,7 +178,8 @@ async function eventOne(done) {
   updateCardText("just wait for me to call you back");
   await waitForBlur();
   await sleep(4000);
-  callBack.play();
+  await callBack();
+  updateCardText("Hi again");
   if (typeof done === 'function') done();
 }
 
