@@ -1,6 +1,7 @@
 
 :root {
        --primary-colour: #0d462a;
+       --tab-colour: #f4f9f6;
 }
 
 
@@ -37,11 +38,19 @@ body {
     left: calc(50% - 150px);
     width: 300px;
     height: 300px;
-    border: 1px solid var(--primary-colour);
-    border-radius: 10px;
     cursor: grab;
       z-index: 1;
 }
+
+.tab {
+  box-sizing: border-box;
+  border: 1px solid var(--primary-colour);
+  border-radius: 10px;
+  width: auto;
+  height: auto;
+  background-color: var(--tab-colour);
+}
+
 
 .tab > header {
     width: 100%;
