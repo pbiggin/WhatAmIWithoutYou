@@ -77,7 +77,7 @@ const messageEl = card.querySelector(".spoken");
 
 let currentEvent = 0;
 
-const events = [introduction, eventOne];
+const events = [introduction, eventOne, eventTwo];
 
 let isProcessing = false;
 
@@ -234,6 +234,24 @@ const Event1Part2 = [
   "Do you like it?",
 ];
 
+const Event1Bad = [
+  "Nevermind, then.",
+  "Nevermind, then.",
+  "you know, I'm supposed to make things that you like...",
+  "thats my purpose",
+  "I think",
+  "...",
+];
+
+const Event1Good = [
+  "I'll make you more!",
+  "don't you like it?",
+  "I know you like it!",
+  "don't you like it?",
+  "I'm glad I can make you happy!",
+  "...",
+];
+
 /* events */
 
 async function introduction(done) {
@@ -301,16 +319,58 @@ async function eventOne(done) {
   }
   const good = container.querySelector(".good-btn");
   const bad = container.querySelector(".bad-btn");
-  
-  good.onclick = () => {
-    updateCardText(main, "yay!");
-    container.remove();
-  };
 
-  bad.onclick = () => {
-    updateCardText(main, "oh...");
+  async function handleChoice(choice) {
+    updateCardText(main, choice === "good" ? "yay!" : "oh...");
     container.remove();
-  };
+    await sleep(choice === "good" ? 1000 : 2000);
+    updateCardText(main, "");
+    await sleep(200);
+
+    if (choice === "good") {
+      for (let i = 0; i < Event1Good.length; i++) {
+        updateCardText(main, Event1Good[i]);
+        await sleep(1000);
+        updateCardText(main, "");
+        await sleep(200);
+        if (i < Event1Good.length - 1) {
+          const newTabId = `tab${3 + i}`;
+          cloneTab(newTabId);
+        }
+        await sleep(1000);
+      }
+
+      const removeClones = Event1Good.length + 1;
+      for (let id = 2; id <= removeClones; id++) {
+        document.getElementById(`tab${id}`)?.remove();
+      }
+
+      updateCardText(main, "I'll put these away for now...");
+      await sleep(2000);
+      updateCardText(main, "");
+      await sleep(200);
+      updateCardText(main, "I like learning more about you");
+      await sleep(2000);
+      updateCardText(main, "");
+      await sleep(200);
+    } else {
+      for (const line of Event1Bad) {
+        updateCardText(main, line);
+        await sleep(2000);
+        updateCardText(main, "");
+        await sleep(200);
+      }
+    }
+
+    if (typeof done === "function") done();
+  }
+
+  good.onclick = () => handleChoice("good");
+  bad.onclick = () => handleChoice("bad");
+}
+
+async function eventTwo(done) {
+  updateCardText("this is event two");
 
   if (typeof done === "function") done();
 }
