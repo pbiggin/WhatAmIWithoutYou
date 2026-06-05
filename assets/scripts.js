@@ -176,6 +176,85 @@ function cloneTab(newId = "tab2") {
   return clone;
 }
 
+async function askQuestion(
+  question,
+  options = ["yes", "no"],
+  tab = document.getElementById("drag"),
+) {
+  if (!tab) return null;
+  updateCardText(tab, question);
+
+  const existingButtons = tab.querySelector(".choice-buttons");
+  if (existingButtons) existingButtons.remove();
+
+  const choiceConfig = Array.isArray(options)
+    ? { type: "buttons", choices: options }
+    : typeof options === "object" && options !== null
+    ? { type: options.type || "buttons", ...options }
+    : { type: "buttons", choices: [String(options)] };
+
+  const container = document.createElement("div");
+  container.className = "choice-buttons";
+  tab.appendChild(container);
+
+
+  return new Promise((resolve) => {
+    const finish = (value) => {
+      container.remove();
+      resolve(value);
+    };
+
+    if (choiceConfig.type === "text" || choiceConfig.type === "textarea") {
+      const input = document.createElement(
+        choiceConfig.type === "textarea" ? "textarea" : "input",
+      );
+      input.type = choiceConfig.inputType || "text";
+      input.placeholder = choiceConfig.placeholder || "Type your answer...";
+      input.className = "question-input";
+      input.style.width = "100%";
+      input.style.marginBottom = "0.5rem";
+
+      const submit = document.createElement("button");
+      submit.type = "button";
+      submit.textContent = choiceConfig.submitLabel || "Submit";
+      submit.className = "option-btn";
+
+      submit.onclick = () => {
+        const value = input.value;
+        if (value !== "" || choiceConfig.allowEmpty) {
+          finish(value);
+        }
+      };
+
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && choiceConfig.submitOnEnter !== false) {
+          event.preventDefault();
+          submit.click();
+        }
+      });
+
+      container.appendChild(input);
+      container.appendChild(submit);
+      input.focus();
+      return;
+    }
+
+    const buttons = document.createElement("div");
+    buttons.className = "button-options";
+    buttons.innerHTML = (choiceConfig.choices || [])
+      .map((option, index) =>
+        `<button class="option-btn option-${index}">${option}</button>`,
+      )
+      .join("\n");
+    container.appendChild(buttons);
+
+    const buttonEls = buttons.querySelectorAll("button");
+    buttonEls.forEach((button, index) => {
+      button.onclick = () => finish(choiceConfig.choices[index]);
+    });
+  });
+}
+
 /* end generated content by copiliot */
 
 function updateCardText(targetOrText, maybeText) {
@@ -265,7 +344,8 @@ const Event2 = [
   "...",
   "...",
   "anyway, anyway",
-]
+  "lets learn a bit more about you",
+];
 
 /* events */
 
@@ -385,12 +465,172 @@ async function eventOne(done) {
 }
 
 async function eventTwo(done) {
+  const main = document.getElementById("drag");
+
   for (const line of Event2) {
     updateCardText(line);
     await sleep(2000);
     updateCardText("");
     await sleep(200);
   }
+
+  const answer = await askQuestion(
+    "Do you like technology",
+    ["yes", "not really"],
+    main,
+  );
+
+  if (answer === "yes") {
+    updateCardText(main, ":)");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    updateCardText(main, "thats good");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+  } else {
+    updateCardText(main, ":/ hm, ok");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    updateCardText(main, "why use technology if you don't like it?");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+  }
+
+  const answer2 = await askQuestion(
+    "Do you use technology a lot",
+    ["yes", "not really"],
+    main,
+  );
+
+  if (answer2 === "yes") {
+    updateCardText(main, ":)");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+  } else {
+    updateCardText("");
+    await sleep(200);
+    updateCardText(main, "okay");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+  }
+
+  const answer3 = await askQuestion(
+    "Do you think technology is helpful",
+    ["yes, it is helpful", "no, I don't think it is"],
+    main,
+  );
+
+  if (answer3 === "yes, it is helpful") {
+    updateCardText(":)");
+    await sleep(2000);
+    updateCardText("");
+    await sleep(200);
+  } else {
+    updateCardText("");
+    await sleep(1500);
+    updateCardText("interesting");
+    await sleep(2000);
+    updateCardText("");
+    await sleep(200);
+  }
+
+  const existingSquare = document.getElementById("background-square");
+  if (existingSquare) existingSquare.remove();
+
+  const square = document.createElement("div");
+  square.id = "background-square";
+  square.style.position = "absolute";
+  square.style.width = "60px";
+  square.style.height = "60px";
+  square.style.backgroundColor = "green";
+  square.style.zIndex = "0";
+  const mainRect = main.getBoundingClientRect();
+  square.style.left = `${Math.max(0, mainRect.left - 80)}px`;
+  square.style.top = `${mainRect.top + 20}px`;
+  document.body.appendChild(square);
+
+  updateCardText('...');
+  await sleep(2000);
+  updateCardText('');
+  await sleep(200);
+  updateCardText('Oh, whats that?');
+  await sleep(2000);
+  updateCardText('');
+  await sleep(200);
+  updateCardText("I'm just keeping some notes");
+  await sleep(2000);
+  updateCardText('');
+  await sleep(200);
+  updateCardText("Don't worry about it");
+  await sleep(2000);
+  updateCardText('');
+   await sleep(200);
+  updateCardText("...");
+  await sleep(2000);
+  updateCardText('');
+  
+  const answer4 = await askQuestion(
+    "I feel that Technology serves me well",
+    ["yes, it is helpful", "no, I don't think it is"],
+    main,
+  );
+
+  const answer5 = await askQuestion(
+    "What do you think of me?",
+    { type: "text", placeholder: "Tell me" },
+    main,
+  );
+
+  /* questions plan:
+  - create file on screen
+  - tell user its nothing dont worry about it
+  - starts asking more abstract questions
+  - Ask text input 
+  - asks questions faster
+  - comments if the user hesistates
+  - final ask: whats your favourite colour (colour inpit)
+  - change file fill to your favourite colour
+  - weirder inputs*/
+
+  if (typeof done === "function") done();
+};
+
+async function eventThree(done) {
+  updateCardText("you know what");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+
+  /* site starts tracking you and talking about your behaviour (leave time, movements, "engageement meter") */
+
+  if (typeof done === "function") done();
+}
+
+async function eventFour(done) {
+  updateCardText("you know what");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+
+  /* site gets desperate to retain you, it starts trying to force you to do things, or atleast hassle you*/
+
+  if (typeof done === "function") done();
+}
+
+async function eventFive(done) {
+  /* the site tries to remake itself as you */
+
+  if (typeof done === "function") done();
+}
+
+async function conclusion(done) {
+  /* the site gives up */
 
   if (typeof done === "function") done();
 }
