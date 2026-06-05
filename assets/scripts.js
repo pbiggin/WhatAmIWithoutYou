@@ -252,6 +252,21 @@ const Event1Good = [
   "...",
 ];
 
+const Event2 = [
+  "...",
+  "I want to know more about you",
+  "...",
+  "!",
+  "so I can be a better site for you!",
+  "thats my purpose",
+  "...",
+  "it is my *purpose*",
+  "...",
+  "...",
+  "...",
+  "anyway, anyway",
+]
+
 /* events */
 
 async function introduction(done) {
@@ -370,7 +385,12 @@ async function eventOne(done) {
 }
 
 async function eventTwo(done) {
-  updateCardText("this is event two");
+  for (const line of Event2) {
+    updateCardText(line);
+    await sleep(2000);
+    updateCardText("");
+    await sleep(200);
+  }
 
   if (typeof done === "function") done();
 }
