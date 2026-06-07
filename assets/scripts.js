@@ -180,6 +180,7 @@ async function askQuestion(
   question,
   options = ["yes", "no"],
   tab = document.getElementById("drag"),
+  showTimer = false,
 ) {
   if (!tab) return null;
   updateCardText(tab, question);
@@ -197,11 +198,40 @@ async function askQuestion(
   container.className = "choice-buttons";
   tab.appendChild(container);
 
+  let timerInterval = null;
+  let startTime = Date.now();
+
+  const timerDisplay = document.createElement("div");
+  timerDisplay.className = "timer-display";
+  timerDisplay.style.fontSize = "16px";
+  timerDisplay.style.color = "var(--primary--colour)";
+  timerDisplay.style.marginBottom = "0.5rem";
+  timerDisplay.style.textAlign = "center";
+
+  if (showTimer) {
+    container.appendChild(timerDisplay);
+    timerInterval = setInterval(() => {
+      const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+      timerDisplay.textContent = `Time: ${elapsed}s`;
+    }, 50);
+  }
+
 
   return new Promise((resolve) => {
     const finish = (value) => {
-      container.remove();
-      resolve(value);
+      if (timerInterval) clearInterval(timerInterval);
+      const finalTime = ((Date.now() - startTime) / 1000).toFixed(2);
+      if (showTimer) {
+        timerDisplay.textContent = `Answered in ${finalTime}s`;
+      }
+      setTimeout(() => {
+        container.remove();
+        if (showTimer) {
+          resolve({ value, time: Number(finalTime) });
+        } else {
+          resolve(value);
+        }
+      }, showTimer ? 800 : 0);
     };
 
     if (choiceConfig.type === "text" || choiceConfig.type === "textarea") {
@@ -581,38 +611,62 @@ async function eventTwo(done) {
     main,
   );
 
-  const answer5 = await askQuestion(
+  const answer5Res = await askQuestion(
     "What do you think of me?",
     { type: "text", placeholder: "Tell me" },
     main,
+    true,
   );
 
-  /* questions plan:
-  - create file on screen
-  - tell user its nothing dont worry about it
-  - starts asking more abstract questions
-  - Ask text input 
-  - asks questions faster
-  - comments if the user hesistates
-  - final ask: whats your favourite colour (colour inpit)
-  - change file fill to your favourite colour
-  - weirder inputs*/
+  const answer5Value =
+    answer5Res && typeof answer5Res === "object" && "value" in answer5Res
+      ? answer5Res.value
+      : answer5Res;
+  const answer5Time =
+    answer5Res && typeof answer5Res === "object" && "time" in answer5Res
+      ? answer5Res.time
+      : null;
 
-  if (typeof done === "function") done();
-};
+  if (answer5Time !== null) {
+    if (answer5Time >= 5 && answer5Time <= 10) {
+      updateCardText(main, "You took a while to answer...");
+      await sleep(2000);
+      updateCardText(main, "Were you thinking about me?");
+      await sleep(2000);
+      updateCardText(main, "");
+      await sleep(200);
+    }
+  if (answer5Time > 10) {
+    updateCardText(main, "...");
+    await sleep(2000);
+    updateCardText(main, "Took you a while.");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
 
-async function eventThree(done) {
-  updateCardText("you know what");
-  await sleep(2000);
-  updateCardText("");
-  await sleep(200);
+  } else {
+      updateCardText(main, "Thanks for the quick answer.");
+      await sleep(1500);
+      updateCardText(main, "");
+      await sleep(200);
+    }
+  }
 
-  /* site starts tracking you and talking about your behaviour (leave time, movements, "engageement meter") */
+  if (answer5Value !== null && answer5Value !== undefined && String(answer5Value).trim() !== "") {
+    updateCardText(main, `${answer5Value}`);
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    updateCardText(main, "i'll remember that");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+  }
 
   if (typeof done === "function") done();
 }
 
-async function eventFour(done) {
+async function eventThree(done) {
   updateCardText("you know what");
   await sleep(2000);
   updateCardText("");
@@ -623,7 +677,7 @@ async function eventFour(done) {
   if (typeof done === "function") done();
 }
 
-async function eventFive(done) {
+async function eventFour(done) {
   /* the site tries to remake itself as you */
 
   if (typeof done === "function") done();
