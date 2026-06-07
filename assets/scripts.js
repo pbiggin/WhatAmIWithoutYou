@@ -191,8 +191,8 @@ async function askQuestion(
   const choiceConfig = Array.isArray(options)
     ? { type: "buttons", choices: options }
     : typeof options === "object" && options !== null
-    ? { type: options.type || "buttons", ...options }
-    : { type: "buttons", choices: [String(options)] };
+      ? { type: options.type || "buttons", ...options }
+      : { type: "buttons", choices: [String(options)] };
 
   const container = document.createElement("div");
   container.className = "choice-buttons";
@@ -200,6 +200,8 @@ async function askQuestion(
 
   let timerInterval = null;
   let startTime = Date.now();
+  const persistentTimer = showTimer === "persistent";
+  const showTimerBool = Boolean(showTimer);
 
   const timerDisplay = document.createElement("div");
   timerDisplay.className = "timer-display";
@@ -208,7 +210,7 @@ async function askQuestion(
   timerDisplay.style.marginBottom = "0.5rem";
   timerDisplay.style.textAlign = "center";
 
-  if (showTimer) {
+  if (showTimerBool) {
     container.appendChild(timerDisplay);
     timerInterval = setInterval(() => {
       const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
@@ -216,22 +218,41 @@ async function askQuestion(
     }, 50);
   }
 
-
   return new Promise((resolve) => {
     const finish = (value) => {
       if (timerInterval) clearInterval(timerInterval);
       const finalTime = ((Date.now() - startTime) / 1000).toFixed(2);
       if (showTimer) {
-        timerDisplay.textContent = `Answered in ${finalTime}s`;
+        timerDisplay.textContent = `${finalTime}s`;
       }
-      setTimeout(() => {
-        container.remove();
-        if (showTimer) {
-          resolve({ value, time: Number(finalTime) });
-        } else {
-          resolve(value);
-        }
-      }, showTimer ? 800 : 0);
+      setTimeout(
+        () => {
+          // If timer was shown and not persistent, clear it and remove display.
+          if (timerInterval && !persistentTimer) clearInterval(timerInterval);
+          if (!persistentTimer) container.remove();
+
+          if (showTimerBool) {
+            if (persistentTimer) {
+              // return a clear function so caller can remove the timer later
+              const clearTimer = () => {
+                if (timerInterval) {
+                  clearInterval(timerInterval);
+                  timerInterval = null;
+                }
+                if (timerDisplay && timerDisplay.parentNode) {
+                  timerDisplay.parentNode.removeChild(timerDisplay);
+                }
+              };
+              resolve({ value, time: Number(finalTime), clearTimer });
+            } else {
+              resolve({ value, time: Number(finalTime) });
+            }
+          } else {
+            resolve(value);
+          }
+        },
+        showTimerBool ? 800 : 0,
+      );
     };
 
     if (choiceConfig.type === "text" || choiceConfig.type === "textarea") {
@@ -272,8 +293,9 @@ async function askQuestion(
     const buttons = document.createElement("div");
     buttons.className = "button-options";
     buttons.innerHTML = (choiceConfig.choices || [])
-      .map((option, index) =>
-        `<button class="option-btn option-${index}">${option}</button>`,
+      .map(
+        (option, index) =>
+          `<button class="option-btn option-${index}">${option}</button>`,
       )
       .join("\n");
     container.appendChild(buttons);
@@ -504,6 +526,9 @@ async function eventTwo(done) {
     await sleep(200);
   }
 
+  // hidden score tracking for eventTwo
+  let techScore = 0;
+
   const answer = await askQuestion(
     "Do you like technology",
     ["yes", "not really"],
@@ -519,6 +544,7 @@ async function eventTwo(done) {
     await sleep(2000);
     updateCardText(main, "");
     await sleep(200);
+    techScore++;
   } else {
     updateCardText(main, ":/ hm, ok");
     await sleep(2000);
@@ -528,6 +554,7 @@ async function eventTwo(done) {
     await sleep(2000);
     updateCardText(main, "");
     await sleep(200);
+    techScore--;
   }
 
   const answer2 = await askQuestion(
@@ -541,6 +568,7 @@ async function eventTwo(done) {
     await sleep(2000);
     updateCardText(main, "");
     await sleep(200);
+    techScore++;
   } else {
     updateCardText("");
     await sleep(200);
@@ -548,6 +576,7 @@ async function eventTwo(done) {
     await sleep(2000);
     updateCardText(main, "");
     await sleep(200);
+    techScore--;
   }
 
   const answer3 = await askQuestion(
@@ -561,6 +590,7 @@ async function eventTwo(done) {
     await sleep(2000);
     updateCardText("");
     await sleep(200);
+    techScore++;
   } else {
     updateCardText("");
     await sleep(1500);
@@ -568,6 +598,7 @@ async function eventTwo(done) {
     await sleep(2000);
     updateCardText("");
     await sleep(200);
+    techScore--;
   }
 
   const existingSquare = document.getElementById("background-square");
@@ -585,31 +616,41 @@ async function eventTwo(done) {
   square.style.top = `${mainRect.top + 20}px`;
   document.body.appendChild(square);
 
-  updateCardText('...');
+  updateCardText("...");
   await sleep(2000);
-  updateCardText('');
+  updateCardText("");
   await sleep(200);
-  updateCardText('Oh, whats that?');
+  updateCardText("Oh, whats that?");
   await sleep(2000);
-  updateCardText('');
+  updateCardText("");
   await sleep(200);
   updateCardText("I'm just keeping some notes");
   await sleep(2000);
-  updateCardText('');
+  updateCardText("");
   await sleep(200);
   updateCardText("Don't worry about it");
   await sleep(2000);
-  updateCardText('');
-   await sleep(200);
+  updateCardText("");
+  await sleep(200);
   updateCardText("...");
   await sleep(2000);
-  updateCardText('');
-  
+  updateCardText("");
+
   const answer4 = await askQuestion(
-    "I feel that Technology serves me well",
-    ["yes, it is helpful", "no, I don't think it is"],
+    "I feel that Technology improves our society",
+    ["Yes", "No"],
     main,
   );
+
+  if (answer4 === "Yes") {
+    updateCardText("Good");
+    await sleep(2000);
+    techScore++;
+  } else {
+    updateCardText("...");
+    await sleep(2000);
+    techScore--;
+  }
 
   const answer5Res = await askQuestion(
     "What do you think of me?",
@@ -635,36 +676,127 @@ async function eventTwo(done) {
       await sleep(2000);
       updateCardText(main, "");
       await sleep(200);
+      techScore++;
     }
-  if (answer5Time > 10) {
-    updateCardText(main, "...");
-    await sleep(2000);
-    updateCardText(main, "Took you a while.");
-    await sleep(2000);
-    updateCardText(main, "");
-    await sleep(200);
-
-  } else {
-      updateCardText(main, "Thanks for the quick answer.");
+    if (answer5Time > 10) {
+      updateCardText(main, "...");
+      await sleep(2000);
+      updateCardText(main, "Took you a while.");
+      await sleep(2000);
+      updateCardText(main, "");
+      await sleep(200);
+      techScore--;
+    }
+    if (answer5Time < 5) {
+      updateCardText(main, "good.");
+      await sleep(2000);
+      updateCardText(main, "");
+      await sleep(200);
+      updateCardText(main, "A quick answer.");
       await sleep(1500);
       updateCardText(main, "");
       await sleep(200);
+      techScore++;
     }
   }
 
-  if (answer5Value !== null && answer5Value !== undefined && String(answer5Value).trim() !== "") {
+  if (
+    answer5Value !== null &&
+    answer5Value !== undefined &&
+    String(answer5Value).trim() !== ""
+  ) {
     updateCardText(main, `${answer5Value}`);
     await sleep(2000);
     updateCardText(main, "");
     await sleep(200);
-    updateCardText(main, "i'll remember that");
+    updateCardText(main, "I'll remember that");
     await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+  }
+
+  const answer6 = await askQuestion(
+    "Do you think technology extends human abilities?",
+    ["Yes, It's a tool", "No, It's a companion", "I'm unsure"],
+    main,
+  );
+
+  if (answer6 === "Yes, It's a tool") {
+    updateCardText(main, "option 1");
+    await sleep(2000);
+  } else if (answer6 === "No, It's a companion") {
+    updateCardText(main, "option 2");
+    await sleep(2000);
+  } else {
+    updateCardText(main, "option 3");
+    await sleep(2000);
+  }
+  
+
+  const answer7 = await askQuestion(
+    "Would you trust technology to help make important decisions for you?",
+    ["Yes", "I'm not sure", "No"],
+    main,
+  );
+
+  if (answer7 === "Yes") {
+    updateCardText(main, "option 1");
+    await sleep(2000);
+  } else if (answer7 === "No") {
+    updateCardText(main, "option 2");
+    await sleep(2000);
+  } else {
+    updateCardText(main, "option 3");
+    await sleep(2000);
+  }
+  
+
+  const answer8 = await askQuestion(
+    "If given the choice, would you rely on technology to replace part of your life?",
+    ["Yes", "No", "I'm not sure"],
+    main,
+  );
+
+
+  if (answer8 === "Yes") {
+    updateCardText(main, "option 1");
+    await sleep(2000);
+  } else if (answer8 === "No") {
+    updateCardText(main, "option 2");
+    await sleep(2000);
+  } else {
+    updateCardText(main, "option 3");
+    await sleep(2000);
+  }
+
+
+  if (techScore <= -2) {
+    updateCardText(main, "You seem cautious about technology.");
+    await sleep(2500);
+    updateCardText(main, "Maybe you see risks more than benefits.");
+    await sleep(2500);
+    updateCardText(main, "");
+    await sleep(200);
+  } else if (techScore <= 2) {
+    updateCardText(main, "You have a balanced view of technology.");
+    await sleep(2500);
+    updateCardText(main, "Sometimes helpful, sometimes not — I get it.");
+    await sleep(2500);
+    updateCardText(main, "");
+    await sleep(200);
+  } else {
+    updateCardText(main, "You really embrace technology!");
+    await sleep(2500);
+    updateCardText(main, "It seems you see it as a powerful tool.");
+    await sleep(2500);
     updateCardText(main, "");
     await sleep(200);
   }
 
   if (typeof done === "function") done();
 }
+
+
 
 async function eventThree(done) {
   updateCardText("you know what");
