@@ -1,22 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/styles.css" />
     <title>What am I without You</title>
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <main class="content">
-        <card id="drag" class="tab">
-            <header id="dragheader"> minimize </header>
-        <p class="spoken center">
-            What am I without you? </p>
-        </card>
-         <button id="startButton" onclick="runNextEvent(); this.remove()" class="center">Start</button>
+      <card id="drag" class="tab">
+        <header id="dragheader">minimize</header>
+        <p class="spoken center">What am I without you?</p>
+        <button
+          id="startButton"
+          onclick="
+            runNextEvent();
+            this.remove();
+          "
+          class="center"
+        >
+          Start
+        </button>
+      </card>
     </main>
-      <button id="debugSkipButton1" onclick="skipToEvent(1); this.remove();" class="center">Skip to event 1</button>
-      <button id="debugSkipButton2" onclick="skipToEvent(2); this.remove();" class="center">Skip to event 2</button>
+    <footer class="bar">
+      <button>WAMIWY</button>
+      <p>time</p>
+    </footer>
+    <button
+      id="debugSkipButton1"
+      onclick="
+        skipToEvent(1);
+        this.remove();
+      "
+    >
+      Skip to event 1
+    </button>
+    <button id="debugSkipButton2" onclick=" skipToEvent(2);this.remove();"
+      class="center"
+    >
+      Skip to event 2
+    </button>
+  
     <script src="assets/scripts.js"></script>
-</body>
+  </body>
 </html>
