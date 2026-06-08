@@ -23,30 +23,43 @@
             runNextEvent();
             this.remove();
           "
-          class="center"
+          class="center start-btn"
         >
           Start
         </button>
       </card>
     </main>
+    <aside class="skips">
+       <button
+        id="debugSkipButton1"
+        onclick="
+          skipToEvent(2);
+          this.remove();
+          document.getElementById('startButton').remove();
+        "
+      >
+        Skip to event 1
+      </button>
+      <button id="debugSkipButton2" onclick=" skipToEvent(3);this.remove(); document.getElementById('startButton').remove();"
+        class="center"
+      >
+        Skip to event 2
+      </button>
+         <button
+        id="debugSkipButton1"
+        onclick="
+          skipToEvent(4);
+          this.remove();
+          document.getElementById('startButton').remove();
+        "
+      >
+        Skip to event 3
+      </button>
+    </aside>
     <footer class="bar">
-      <button>WAMIWY</button>
+      <button>PBIGGIN</button>
       <p>time</p>
     </footer>
-    <button
-      id="debugSkipButton1"
-      onclick="
-        skipToEvent(1);
-        this.remove();
-      "
-    >
-      Skip to event 1
-    </button>
-    <button id="debugSkipButton2" onclick=" skipToEvent(2);this.remove();"
-      class="center"
-    >
-      Skip to event 2
-    </button>
   
     <script src="assets/scripts.js"></script>
   </body>

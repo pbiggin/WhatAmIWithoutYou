@@ -86,13 +86,6 @@ const events = [
 
 let isProcessing = false;
 
-function runNextEvent() {
-  if (currentEvent >= events.length) return;
-  const next = events[currentEvent];
-  currentEvent += 1;
-  next(runNextEvent);
-}
-
 function skipToEvent(index) {
   const raw = Number(index);
   if (Number.isNaN(raw)) return;
@@ -102,6 +95,13 @@ function skipToEvent(index) {
 
   currentEvent = target;
   runNextEvent();
+}
+
+function runNextEvent() {
+  if (currentEvent >= events.length) return;
+  const next = events[currentEvent];
+  currentEvent += 1;
+  next(runNextEvent);
 }
 
 function sleep(ms) {
@@ -128,8 +128,15 @@ function waitForBlur() {
   return new Promise((resolve) => {
     function onBlur() {
       window.removeEventListener("blur", onBlur);
+      clearTimeout(timeoutId);
       resolve();
     }
+
+    // Auto-resolve after 10 seconds if blur doesn't happen (for testing)
+    const timeoutId = setTimeout(() => {
+      window.removeEventListener("blur", onBlur);
+      resolve();
+    }, 10000);
 
     window.addEventListener("blur", onBlur, { once: true });
   });
@@ -335,6 +342,10 @@ function updateCardText(targetOrText, maybeText) {
       ? targetOrText.querySelector(".spoken")
       : messageEl;
   if (spokenEl) spokenEl.textContent = text;
+}
+
+function attentionTab(url) {
+ window.open(url, '_blank').focus();
 }
 
 /* end lookouts */
@@ -621,7 +632,7 @@ async function eventTwo(done) {
   square.style.position = "absolute";
   square.style.width = "60px";
   square.style.height = "60px";
-  square.style.backgroundColor = "green";
+  square.style.backgroundColor = "var(--tab-colour)";
   square.style.zIndex = "0";
   const mainRect = main.getBoundingClientRect();
   square.style.left = `${Math.max(0, mainRect.left - 80)}px`;
@@ -663,6 +674,8 @@ async function eventTwo(done) {
     await sleep(2000);
     techScore--;
   }
+
+    /* generates a mouse tracker thing */
 
   const answer5Res = await askQuestion(
     "What do you think of me?",
@@ -712,6 +725,9 @@ async function eventTwo(done) {
     }
   }
 
+    /* produce a timer which reacts to click */
+    /* produce a frame with user's text in it */
+
   if (
     answer5Value !== null &&
     answer5Value !== undefined &&
@@ -758,6 +774,8 @@ async function eventTwo(done) {
     await sleep(200);
   }
 
+   /* produce a smily face tab that reacts to your choice */
+
   const answer7 = await askQuestion(
     "Would you trust technology to help make important decisions for you?",
     ["Yes", "I'm not sure", "No"],
@@ -765,15 +783,30 @@ async function eventTwo(done) {
   );
 
   if (answer7 === "Yes") {
-    updateCardText(main, "option 1");
+    updateCardText(main, "...");
     await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    updateCardText(main, "");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
   } else if (answer7 === "No") {
-    updateCardText(main, "option 2");
+    updateCardText(main, "...");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    updateCardText(main, "You dont trust me?");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
     await sleep(2000);
   } else {
-    updateCardText(main, "option 3");
+    updateCardText(main, "I can help you with that!");
     await sleep(2000);
   }
+
+  /* produces a yes / no calculator thing */
 
   const answer8 = await askQuestion(
     "If given the choice, would you rely on technology to replace part of your life?",
@@ -791,6 +824,8 @@ async function eventTwo(done) {
     updateCardText(main, "option 3");
     await sleep(2000);
   }
+
+   /* produce a yes / no calculator thing */
 
   if (techScore <= -2) {
     updateCardText(main, "...");
@@ -830,10 +865,7 @@ async function eventTwo(done) {
 }
 
 async function eventThree(done) {
-  updateCardText("you know what");
-  await sleep(2000);
-  updateCardText("");
-  await sleep(200);
+  
 
   /* site gets desperate to retain you, it starts trying to force you to do things, or atleast hassle you*/
 
@@ -841,7 +873,59 @@ async function eventThree(done) {
 }
 
 async function eventFour(done) {
-  /* the site tries to remake itself as you */
+  updateCardText("you know what");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("Wouldn't it be nice if you stayed here for a while?");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+
+  /* pings you if you leave */ 
+
+  await waitForBlur();
+  callBack();
+  await waitForFocus();
+  updateCardText("Hey!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("Why'd you leave?");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("don't leave...");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+
+  await waitForBlur();
+  callBack();
+  await waitForFocus();
+  updateCardText("Stop that!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+
+  await waitForBlur();
+  callBack();
+  await waitForFocus();
+  updateCardText("Am I not good enough for you?");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+
+  await waitForBlur();
+  attentionTab('comeback.html');
+  await waitForBlur();
+  attentionTab('comeback.html');
+
+  
+  /* site starts opening other tabs (max out at a certain stage) that say come back!!! */
+  
+
+
 
   if (typeof done === "function") done();
 }
