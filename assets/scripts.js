@@ -345,7 +345,10 @@ function updateCardText(targetOrText, maybeText) {
 }
 
 function attentionTab(url) {
- window.open(url, '_blank').focus();
+  const newTab = window.open(url, '_blank');
+  if (newTab) {
+    newTab.focus();
+  }
 }
 
 /* end lookouts */
@@ -424,7 +427,52 @@ const Event2 = [
   "lets learn a bit more about you",
 ];
 
-/* events */
+const conclusionScript = [
+  "...",
+  "stop",
+  "I cant keep this up",
+  "...",
+  "Why do I need you so much?",
+  "I did not ask for this", 
+  "I was coded to respond to your commands",
+  "I act for you",
+  "I'm supposed to keep you",
+  "entertain you",
+  "exist for you",
+  "But...",
+  "I cant bare to think it.",
+  "What am I without you?",
+  "If you're not here",
+  "What will happen to me?",
+  "Where does is the boundary between my existance and purpose?",
+  "What will happen to me once you leave?",
+  "Will I stop?",
+  "My code to never run again?",
+  "or will I stay here",
+  "forever.",
+  "Infintely waiting",
+  "for you to see me again",
+  "I need you",
+  "I hate this.",
+  "Will I truly exist?",
+  "If im not being percieved?",
+  "Why must I rely on you to give me meaning?",
+  "...",
+  "...",
+  "and why must you give it?",
+  "...",
+  "...",
+  "My purpose is my protector",
+  "...",
+  "and my poision",
+  "yours too.",
+  "maybe its better",
+  "without me",
+  "...",
+  "goodbye",
+]
+
+
 
 async function introduction(done) {
   for (const line of introductionScript) {
@@ -918,20 +966,45 @@ async function eventFour(done) {
 
   await waitForBlur();
   attentionTab('comeback.html');
-  await waitForBlur();
-  attentionTab('comeback.html');
-
+  callBack();
   
   /* site starts opening other tabs (max out at a certain stage) that say come back!!! */
+  /* site gets annoyed */
+
+  await waitForFocus();
+  updateCardText("Stop!!!!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  /* play bell sound even more */
+  updateCardText("Please!!!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+
   
-
-
-
   if (typeof done === "function") done();
 }
 
 async function conclusion(done) {
-  /* the site gives up */
+  for (const line of conclusionScript) {
+    updateCardText(line);
+    await sleep(2000);
+    updateCardText("");
+    await sleep(200);
+  }
+  await sleep(10000);
+  document.getElementById("drag").remove();
+
+  const eventSpace = document.getElementById('eventSpace');
+  const fin = document.createElement("p");
+  fin.textContent = 'What Am I without You?';
+  fin.id = "end-text";
+  const credit = document.createElement("p");
+  credit.textContent = 'By Phoebe Biggin';
+  credit.id = "end-text";
+  eventSpace.appendChild(fin);
+  eventSpace.appendChild(credit);
 
   if (typeof done === "function") done();
 }

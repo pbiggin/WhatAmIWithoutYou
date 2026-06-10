@@ -13,7 +13,7 @@
     />
   </head>
   <body>
-    <main class="content">
+    <main class="content" id="eventSpace">
       <card id="drag" class="tab">
         <header id="dragheader">minimize</header>
         <p class="spoken center">What am I without you?</p>
@@ -54,6 +54,27 @@
         "
       >
         Skip to event 3
+      </button>
+       </button>
+         <button
+        id="debugSkipButton1"
+        onclick="
+          skipToEvent(5);
+          this.remove();
+          document.getElementById('startButton').remove();
+        "
+      >
+        Skip to event 4
+      </button>
+         <button
+        id="debugSkipButton1"
+        onclick="
+          skipToEvent(6);
+          this.remove();
+          document.getElementById('startButton').remove();
+        "
+      >
+        Skip to conclusion
       </button>
     </aside>
     <footer class="bar">

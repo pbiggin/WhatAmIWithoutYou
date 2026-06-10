@@ -121,3 +121,22 @@ button {
     justify-content: space-between;
     background-color: var(--accent-colour);
 }
+
+#end-text {
+    font-size: 5vw;
+    padding: 0;
+    margin: auto 0 0 0;
+    position: relative;
+    gap: 10px;
+}
+
+#end-text:last-child {
+    margin-top: 0;
+    margin-bottom: auto;
+}
+
+#eventSpace {
+    align-content: center;
+      display: flex;
+    flex-direction: column;
+}
