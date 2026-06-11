@@ -12,6 +12,12 @@
     color: var(--primary-colour);
 }
 
+html {
+  height: 100dvh; 
+  margin: 0; 
+  padding: 0;
+  overflow: hidden; 
+}
 
 .silkscreen-regular {
   font-family: "Silkscreen", sans-serif;
@@ -33,7 +39,7 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position-y: bottom;
-    height: 100vh;
+    height: 98vh;
 
 }
 
@@ -53,7 +59,8 @@ body {
     top: 0;
     display: flex;
     flex-direction: column;
-
+    height: 50vh;
+    margin-top: 10px;
 }
 
 .center {
@@ -70,16 +77,19 @@ body {
     width: 300px;
     height: 300px;
     cursor: grab;
-      z-index: 1;
+    z-index: 5;
 }
 
 .tab {
+  position: relative;
   box-sizing: border-box;
   border: 2px solid var(--primary-colour);
   border-radius: 10px;
   width: auto;
   height: auto;
   background-color: var(--tab-colour);
+  z-index: 5;
+  justify-content: center;
 }
 
 
@@ -99,14 +109,29 @@ body {
 
 button {
   font-family: "Silkscreen", sans-serif;
+  align-content: center;
+  justify-content: center;
   border: 2px solid var(--primary-colour);
-  border-radius: 5px;
+  border-radius: 10px;
+  margin: 1vh;
+}
+
+button.skip {
+  height: 7vh;
+  width: 7vh;
+  border: none;
+  background-color: transparent;
+}
+
+button > img {
+    height: 100%;
 }
 
 .good-btn, .bad-btn, .option-btn, .start-btn, .button-options {
     margin: auto;
     align-self: center;
     justify-self: center;
+    
     
 }
 
@@ -139,4 +164,16 @@ button {
     align-content: center;
       display: flex;
     flex-direction: column;
+}
+
+.loud {
+font-size: 150%;
+}
+
+.louder {
+font-size: 200%;
+}
+
+.loudest {
+font-size: 500%;
 }

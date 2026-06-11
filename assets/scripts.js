@@ -1,3 +1,7 @@
+
+
+/* drag element code borrowed from Karen Ann Donnachie (https://github.com/karenanndonnachie/VCA_INTERACTIVEMEDIA/tree/main/CHEATSHEETS) and adjusted for this project by Phoebe Biggin */
+
 dragElement(document.getElementById("drag"));
 
 function dragElement(elmnt) {
@@ -132,7 +136,6 @@ function waitForBlur() {
       resolve();
     }
 
-    // Auto-resolve after 10 seconds if blur doesn't happen (for testing)
     const timeoutId = setTimeout(() => {
       window.removeEventListener("blur", onBlur);
       resolve();
@@ -330,6 +333,30 @@ async function askQuestion(
 }
 
 /* end generated content by copiliot */
+/* code borrowed from https://developer.mozilla.org/en-US/docs/Web/API/Notification/permission_static to help handle notifications permissions feature */
+
+function notifyMe() {
+  if (!("Notification" in window)) {
+    // Check if the browser supports notifications
+    alert("This browser does not support desktop notification");
+  } else if (Notification.permission === "granted") {
+    // Check whether notification permissions have already been granted;
+    // if so, create a notification
+    const notification = new Notification("Notification permissions granted. thank you.");
+    // …
+  } else if (Notification.permission !== "denied") {
+    // We need to ask the user for permission
+    Notification.requestPermission().then((permission) => {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        const notification = new Notification("Notification permissions granted. thank you.");
+        // …
+      }
+    });
+  }
+}
+
+/* end  borrowed code */
 
 function updateCardText(targetOrText, maybeText) {
   if (typeof targetOrText === "string") {
@@ -350,6 +377,22 @@ function attentionTab(url) {
     newTab.focus();
   }
 }
+
+function callbackNotification() {
+    const options = {
+      body: "Please please please please please please please please",
+      icon: "/assets/ICON-SAD.png",
+      silent: false,                        // Play system sound
+      requireInteraction: false             // Closes automatically after a few seconds
+    }
+
+    const notification = new Notification("Come Back", options);
+
+    notification.onclick = (event) => {
+      event.preventDefault(); 
+      window.focus(); 
+    };
+  }
 
 /* end lookouts */
 
@@ -675,17 +718,19 @@ async function eventTwo(done) {
   const existingSquare = document.getElementById("background-square");
   if (existingSquare) existingSquare.remove();
 
-  const square = document.createElement("div");
-  square.id = "background-square";
-  square.style.position = "absolute";
-  square.style.width = "60px";
-  square.style.height = "60px";
-  square.style.backgroundColor = "var(--tab-colour)";
-  square.style.zIndex = "0";
+  const file = document.createElement("img");
+  file.id = "background-square";
+  file.src = 'assets/ICON-FOLDER.png';
+  file.style.position = "absolute";
+  file.style.width = "7vh";
+  file.style.height = "7vh";
+  file.style.zIndex = "1";
+  file.style.position = "relative";
+  
   const mainRect = main.getBoundingClientRect();
-  square.style.left = `${Math.max(0, mainRect.left - 80)}px`;
-  square.style.top = `${mainRect.top + 20}px`;
-  document.body.appendChild(square);
+  file.style.left = `${Math.max(0, mainRect.left - 80)}px`;
+  file.style.top = `${mainRect.top + 20}px`;
+  document.body.appendChild(file);
 
   updateCardText("...");
   await sleep(2000);
@@ -949,6 +994,7 @@ async function eventFour(done) {
   await sleep(200);
 
   await waitForBlur();
+  callbackNotification();
   callBack();
   await waitForFocus();
   updateCardText("Stop that!");
@@ -957,6 +1003,7 @@ async function eventFour(done) {
   await sleep(200);
 
   await waitForBlur();
+  callbackNotification();
   callBack();
   await waitForFocus();
   updateCardText("Am I not good enough for you?");
@@ -966,7 +1013,11 @@ async function eventFour(done) {
 
   await waitForBlur();
   attentionTab('comeback.html');
+  callbackNotification();
+  
+
   callBack();
+  callbackNotification();
   
   /* site starts opening other tabs (max out at a certain stage) that say come back!!! */
   /* site gets annoyed */
@@ -982,11 +1033,43 @@ async function eventFour(done) {
   updateCardText("");
   await sleep(200);
 
+  /* starts getting mad */
+
+  await waitForBlur();
+  callBack();
+  await waitForFocus();
+  messageEl.classList.add('loud');
+  updateCardText("No!!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  messageEl.classList.replace("loud", "louder");
+  updateCardText("NO!!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  messageEl.classList.replace("louder", "loudest");
+  updateCardText("NO!!!!!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("STOP.");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("LEAVING.");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  
+  
   
   if (typeof done === "function") done();
 }
 
 async function conclusion(done) {
+   messageEl.classList.remove("loudest");
+  await waitForFocus();
   for (const line of conclusionScript) {
     updateCardText(line);
     await sleep(2000);
