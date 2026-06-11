@@ -372,30 +372,6 @@ function attentionTab(url) {
     newTab.focus();
   }
 }
-
-function callbackNotification() {
-  const options = {
-    body: "Please please please please please please please please",
-    icon: "/assets/ICON-SAD.png",
-    silent: false, // Play system sound
-    requireInteraction: false, // Closes automatically after a few seconds
-  };
-
-  const notification = new Notification("Come Back", options);
-
-  notification.onclick = (event) => {
-    event.preventDefault();
-    window.focus();
-  };
-}
-
-function changeIcon(newIconUrl) {
-  let Iconlink = document.querySelector("link[rel~='icon']");
-
-  // Update the href attribute with the new image path
-  Iconlink.href = newIconUrl;
-}
-
 /* end lookouts */
 
 /* scripts */
@@ -996,7 +972,7 @@ async function eventThree(done) {
 
   await waitForBlur();
   changeIcon("assets/ICON-SAD.png");
-  callbackNotification();
+ 
   callBack();
   await waitForFocus();
   updateCardText("Stop that!");
