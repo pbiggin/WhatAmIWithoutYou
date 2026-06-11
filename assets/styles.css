@@ -40,7 +40,6 @@ body {
     background-repeat: no-repeat;
     background-position-y: bottom;
     height: 98vh;
-
 }
 
 .content {
@@ -80,7 +79,7 @@ body {
     z-index: 5;
 }
 
-.tab {
+.tab{
   position: relative;
   box-sizing: border-box;
   border: 2px solid var(--primary-colour);
@@ -88,18 +87,28 @@ body {
   width: auto;
   height: auto;
   background-color: var(--tab-colour);
+  overflow: hidden;
   z-index: 5;
   justify-content: center;
 }
 
+.choice-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 
 .tab > header {
+    position: relative;
     width: 100%;
     border-bottom: 2px solid var(--primary-colour);
     padding: 5px;
     background-color: var(--accent-colour);
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
+    z-index: 20;
 }
 
 .spoken {
@@ -131,7 +140,6 @@ button > img {
     margin: auto;
     align-self: center;
     justify-self: center;
-    
     
 }
 
