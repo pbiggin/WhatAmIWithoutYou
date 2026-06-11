@@ -35,7 +35,7 @@ body {
     font-family: "Silkscreen", sans-serif;
     margin: 0; 
     background-color: var(--background-colour);
-    background-image: url(/assets/Background.png);
+    background-image: url(assets/Background.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position-y: bottom;
@@ -154,7 +154,7 @@ button > img {
     justify-content: space-between;
     background-color: var(--accent-colour);
 }
-
+x
 #end-text {
     font-size: 5vw;
     padding: 0;
