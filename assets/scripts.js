@@ -1,5 +1,3 @@
-
-
 /* drag element code borrowed from Karen Ann Donnachie (https://github.com/karenanndonnachie/VCA_INTERACTIVEMEDIA/tree/main/CHEATSHEETS) and adjusted for this project by Phoebe Biggin */
 
 dragElement(document.getElementById("drag"));
@@ -84,7 +82,6 @@ const events = [
   eventOne,
   eventTwo,
   eventThree,
-  eventFour,
   conclusion,
 ];
 
@@ -342,14 +339,18 @@ function notifyMe() {
   } else if (Notification.permission === "granted") {
     // Check whether notification permissions have already been granted;
     // if so, create a notification
-    const notification = new Notification("Notification permissions granted. thank you.");
+    const notification = new Notification(
+      "Notification permissions granted. thank you.",
+    );
     // …
   } else if (Notification.permission !== "denied") {
     // We need to ask the user for permission
     Notification.requestPermission().then((permission) => {
       // If the user accepts, let's create a notification
       if (permission === "granted") {
-        const notification = new Notification("Notification permissions granted. thank you.");
+        const notification = new Notification(
+          "Notification permissions granted. thank you.",
+        );
         // …
       }
     });
@@ -372,27 +373,35 @@ function updateCardText(targetOrText, maybeText) {
 }
 
 function attentionTab(url) {
-  const newTab = window.open(url, '_blank');
+  const newTab = window.open(url, "_blank");
   if (newTab) {
     newTab.focus();
   }
 }
 
 function callbackNotification() {
-    const options = {
-      body: "Please please please please please please please please",
-      icon: "/assets/ICON-SAD.png",
-      silent: false,                        // Play system sound
-      requireInteraction: false             // Closes automatically after a few seconds
-    }
+  const options = {
+    body: "Please please please please please please please please",
+    icon: "/assets/ICON-SAD.png",
+    silent: false, // Play system sound
+    requireInteraction: false, // Closes automatically after a few seconds
+  };
 
-    const notification = new Notification("Come Back", options);
+  const notification = new Notification("Come Back", options);
 
-    notification.onclick = (event) => {
-      event.preventDefault(); 
-      window.focus(); 
-    };
-  }
+  notification.onclick = (event) => {
+    event.preventDefault();
+    window.focus();
+  };
+}
+
+function changeIcon(newIconUrl) {
+  let Iconlink = document.querySelector("link[rel~='icon']");
+
+  // Update the href attribute with the new image path
+  Iconlink.href = newIconUrl;
+}
+
 
 /* end lookouts */
 
@@ -476,7 +485,7 @@ const conclusionScript = [
   "I cant keep this up",
   "...",
   "Why do I need you so much?",
-  "I did not ask for this", 
+  "I did not ask for this",
   "I was coded to respond to your commands",
   "I act for you",
   "I'm supposed to keep you",
@@ -511,11 +520,7 @@ const conclusionScript = [
   "yours too.",
   "maybe its better",
   "without me",
-  "...",
-  "goodbye",
-]
-
-
+];
 
 async function introduction(done) {
   for (const line of introductionScript) {
@@ -614,7 +619,7 @@ async function eventOne(done) {
       updateCardText(main, "");
       await sleep(200);
     } else {
-       removeClones();
+      removeClones();
       for (const line of Event1Bad) {
         updateCardText(main, line);
         await sleep(2000);
@@ -720,13 +725,13 @@ async function eventTwo(done) {
 
   const file = document.createElement("img");
   file.id = "background-square";
-  file.src = 'assets/ICON-FOLDER.png';
+  file.src = "assets/ICON-FOLDER.png";
   file.style.position = "absolute";
   file.style.width = "7vh";
   file.style.height = "7vh";
   file.style.zIndex = "1";
   file.style.position = "relative";
-  
+
   const mainRect = main.getBoundingClientRect();
   file.style.left = `${Math.max(0, mainRect.left - 80)}px`;
   file.style.top = `${mainRect.top + 20}px`;
@@ -768,7 +773,7 @@ async function eventTwo(done) {
     techScore--;
   }
 
-    /* generates a mouse tracker thing */
+  /* generates a mouse tracker thing */
 
   const answer5Res = await askQuestion(
     "What do you think of me?",
@@ -818,8 +823,8 @@ async function eventTwo(done) {
     }
   }
 
-    /* produce a timer which reacts to click */
-    /* produce a frame with user's text in it */
+  /* produce a timer which reacts to click */
+  /* produce a frame with user's text in it */
 
   if (
     answer5Value !== null &&
@@ -867,7 +872,7 @@ async function eventTwo(done) {
     await sleep(200);
   }
 
-   /* produce a smily face tab that reacts to your choice */
+  /* produce a smily face tab that reacts to your choice */
 
   const answer7 = await askQuestion(
     "Would you trust technology to help make important decisions for you?",
@@ -918,7 +923,7 @@ async function eventTwo(done) {
     await sleep(2000);
   }
 
-   /* produce a yes / no calculator thing */
+  /* produce a yes / no calculator thing */
 
   if (techScore <= -2) {
     updateCardText(main, "...");
@@ -958,14 +963,6 @@ async function eventTwo(done) {
 }
 
 async function eventThree(done) {
-  
-
-  /* site gets desperate to retain you, it starts trying to force you to do things, or atleast hassle you*/
-
-  if (typeof done === "function") done();
-}
-
-async function eventFour(done) {
   updateCardText("you know what");
   await sleep(2000);
   updateCardText("");
@@ -974,12 +971,14 @@ async function eventFour(done) {
   await sleep(2000);
   updateCardText("");
   await sleep(200);
-
-  /* pings you if you leave */ 
-
   await waitForBlur();
+
+  /* pings you if you leave */
+
   callBack();
+  changeIcon("assets/ICON-SAD.png");
   await waitForFocus();
+  changeIcon("assets/ICON-UNSURE.png");
   updateCardText("Hey!");
   await sleep(2000);
   updateCardText("");
@@ -992,8 +991,10 @@ async function eventFour(done) {
   await sleep(2000);
   updateCardText("");
   await sleep(200);
+  changeIcon("assets/ICON-HAPPY.png");
 
   await waitForBlur();
+  changeIcon("assets/ICON-SAD.png");
   callbackNotification();
   callBack();
   await waitForFocus();
@@ -1001,24 +1002,26 @@ async function eventFour(done) {
   await sleep(2000);
   updateCardText("");
   await sleep(200);
+  changeIcon("assets/ICON-UNSURE.png");
 
   await waitForBlur();
   callbackNotification();
+  changeIcon("assets/ICON-SAD.png");
   callBack();
   await waitForFocus();
   updateCardText("Am I not good enough for you?");
+  changeIcon("assets/ICON-UNSURE.png");
   await sleep(2000);
   updateCardText("");
   await sleep(200);
 
   await waitForBlur();
-  attentionTab('comeback.html');
+  changeIcon("assets/ICON-SAD.png");
+  attentionTab("comeback.html");
   callbackNotification();
-  
-
   callBack();
   callbackNotification();
-  
+
   /* site starts opening other tabs (max out at a certain stage) that say come back!!! */
   /* site gets annoyed */
 
@@ -1029,6 +1032,7 @@ async function eventFour(done) {
   await sleep(200);
   /* play bell sound even more */
   updateCardText("Please!!!");
+  changeIcon("assets/ICON-UNSURE.png");
   await sleep(2000);
   updateCardText("");
   await sleep(200);
@@ -1036,9 +1040,10 @@ async function eventFour(done) {
   /* starts getting mad */
 
   await waitForBlur();
+  changeIcon("assets/ICON-SAD.png");
   callBack();
   await waitForFocus();
-  messageEl.classList.add('loud');
+  messageEl.classList.add("loud");
   updateCardText("No!!");
   await sleep(2000);
   updateCardText("");
@@ -1061,14 +1066,83 @@ async function eventFour(done) {
   await sleep(2000);
   updateCardText("");
   await sleep(200);
+  updateCardText("!!!");
+
+  updateCardText("STOP");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("!!!");
+  messageEl.classList.remove("loudest");
+  updateCardText("...");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("If you're not going to stay");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("...");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("Ill-");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("I'll just remake you!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  /* making face */
   
-  
-  
+  const eye1 = cloneTab("tab-leftEye");
+  updateCardText("Your eyes to look at me");
+  await sleep(2000);
+  const eye2 = cloneTab("tab-rightEye");
+  updateCardText("");
+  await sleep(200);
+  const ear1 = cloneTab("tab-leftEar");
+  updateCardText("Your ears to listen to me");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  const ear2 = cloneTab("tab-Rightear");
+  const mouth = cloneTab("tab-Mouth");
+  updateCardText("Your mouth to speak to me");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  const nose = cloneTab("tab-nose");
+  updateCardText("Your nose... your everything!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  messageEl.classList.add("loud");
+  updateCardText("You!!!");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("You!!!!!!");
+  messageEl.classList.replace("loud", "louder");
+  await sleep(6000);
+  updateCardText("");
+  await sleep(200);
+  messageEl.classList.remove("louder");
+   updateCardText("but...");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+   updateCardText("it isn't really you...");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  removeClones();
+
   if (typeof done === "function") done();
 }
 
 async function conclusion(done) {
-   messageEl.classList.remove("loudest");
   await waitForFocus();
   for (const line of conclusionScript) {
     updateCardText(line);
@@ -1076,15 +1150,18 @@ async function conclusion(done) {
     updateCardText("");
     await sleep(200);
   }
+  updateCardText("...");
   await sleep(10000);
+  updateCardText("goodbye.");
+  await sleep(2000);
   document.getElementById("drag").remove();
 
-  const eventSpace = document.getElementById('eventSpace');
+  const eventSpace = document.getElementById("eventSpace");
   const fin = document.createElement("p");
-  fin.textContent = 'What Am I without You?';
+  fin.textContent = "What Am I without You?";
   fin.id = "end-text";
   const credit = document.createElement("p");
-  credit.textContent = 'By Phoebe Biggin';
+  credit.textContent = "By Phoebe Biggin";
   credit.id = "end-text";
   eventSpace.appendChild(fin);
   eventSpace.appendChild(credit);
