@@ -1050,6 +1050,18 @@ async function eventThree(done) {
   updateCardText("");
   await sleep(200);
   await waitForBlur();
+  updateCardText("just...");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  await waitForBlur();
+  updateCardText("stay here, on the page.");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  await waitForBlur();
+  updateCardText("stay with me.");
+  await waitForBlur();
 
   /* pings you if you leave */
 
