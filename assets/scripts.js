@@ -136,7 +136,7 @@ function waitForBlur() {
   });
 }
 
-const bellAudio = new Audio("../assets/bell.mp3");
+const bellAudio = new Audio("bell.mp3");
 bellAudio.preload = "auto";
 
 function callBack() {
@@ -376,7 +376,7 @@ function attentionTab(url) {
 function callbackNotification() {
   const options = {
     body: "Please please please please please please please please",
-    icon: "/../assets/ICON-SAD.png",
+    icon: "ICON-SAD.png",
     silent: false, // Play system sound
     requireInteraction: false, // Closes automatically after a few seconds
   };
@@ -516,11 +516,11 @@ const conclusionScript = [
 ];
 
 const dogImages = [
-  "../assets/DOG1_PIXEL.png",
-  "../assets/DOG2_PIXEL.png",
-  "../assets/DOG3_PIXEL.png",
-  "../assets/DOG4_PIXEL.png",
-  "../assets/DOG5_PIXEL.png",
+  "DOG1_PIXEL.png",
+  "DOG2_PIXEL.png",
+  "DOG3_PIXEL.png",
+  "DOG4_PIXEL.png",
+  "DOG5_PIXEL.png",
 ];
 
 const randomDog = Math.floor(Math.random() * dogImages.length);
@@ -768,7 +768,7 @@ async function eventTwo(done) {
 
   const file = document.createElement("img");
   file.id = "background-square";
-  file.src = "../assets/ICON-FOLDER.png";
+  file.src = "ICON-FOLDER.png";
   file.style.position = "absolute";
   file.style.width = "7vh";
   file.style.height = "7vh";
@@ -1066,9 +1066,9 @@ async function eventThree(done) {
   /* pings you if you leave */
 
   callBack();
-  changeIcon("../assets/ICON-SAD.png");
+  changeIcon("ICON-SAD.png");
   await waitForFocus();
-  changeIcon("../assets/ICON-UNSURE.png");
+  changeIcon("ICON-UNSURE.png");
   updateCardText("Hey!");
   await sleep(2000);
   updateCardText("");
@@ -1081,10 +1081,10 @@ async function eventThree(done) {
   await sleep(2000);
   updateCardText("");
   await sleep(200);
-  changeIcon("../assets/ICON-HAPPY.png");
+  changeIcon("ICON-HAPPY.png");
 
   await waitForBlur();
-  changeIcon("../assets/ICON-SAD.png");
+  changeIcon("ICON-SAD.png");
 
   callBack();
   await waitForFocus();
@@ -1092,21 +1092,21 @@ async function eventThree(done) {
   await sleep(2000);
   updateCardText("");
   await sleep(200);
-  changeIcon("../assets/ICON-UNSURE.png");
+  changeIcon("ICON-UNSURE.png");
 
   await waitForBlur();
   callbackNotification();
-  changeIcon("../assets/ICON-SAD.png");
+  changeIcon("ICON-SAD.png");
   callBack();
   await waitForFocus();
   updateCardText("Am I not good enough for you?");
-  changeIcon("../assets/ICON-UNSURE.png");
+  changeIcon("ICON-UNSURE.png");
   await sleep(2000);
   updateCardText("");
   await sleep(200);
 
   await waitForBlur();
-  changeIcon("../assets/ICON-SAD.png");
+  changeIcon("ICON-SAD.png");
   attentionTab("comeback.html");
   callbackNotification();
   callBack();
@@ -1122,7 +1122,7 @@ async function eventThree(done) {
   await sleep(200);
   /* play bell sound even more */
   updateCardText("Please!!!");
-  changeIcon("../assets/ICON-UNSURE.png");
+  changeIcon("ICON-UNSURE.png");
   await sleep(2000);
   updateCardText("");
   await sleep(200);
@@ -1138,7 +1138,7 @@ async function eventThree(done) {
   /* starts getting mad */
 
   await waitForBlur();
-  changeIcon("../assets/ICON-SAD.png");
+  changeIcon("ICON-SAD.png");
   callBack();
   await waitForFocus();
   messageEl.classList.add("loud");
@@ -1232,7 +1232,7 @@ async function eventThree(done) {
     });
 
     const eyeFrame = document.createElement("img");
-    eyeFrame.src = "../assets/face-01.png";
+    eyeFrame.src = "face-01.png";
 
     eyeFrame.style.position = "absolute";
     eyeFrame.style.top = "10%";
@@ -1284,7 +1284,7 @@ async function eventThree(done) {
     });
 
     const eyeFrame = document.createElement("img");
-    eyeFrame.src = "../../assets/face-03.png";
+    eyeFrame.src = "face-03.png";
 
     eyeFrame.style.position = "absolute";
     eyeFrame.style.top = "10%";
@@ -1303,7 +1303,7 @@ async function eventThree(done) {
   if (ear1) {
     const body3 = ear1.querySelector(".tab-body");
     const earPiece = document.createElement("img");
-    earPiece.src = "../../assets/face-06.png";
+    earPiece.src = "face-06.png";
     earPiece.style.position = "absolute";
     earPiece.style.top = "10%";
     earPiece.style.left = "0";
@@ -1321,7 +1321,7 @@ async function eventThree(done) {
     const body4 = ear2.querySelector(".tab-body");
 
     const earPiece = document.createElement("img");
-    earPiece.src = "../assets/face-05.png";
+    earPiece.src = "face-05.png";
     earPiece.style.position = "absolute";
     earPiece.style.top = "10%";
     earPiece.style.left = "0";
@@ -1334,7 +1334,7 @@ async function eventThree(done) {
   if (mouth) {
     const body5 = mouth.querySelector(".tab-body");
     const mouthPiece = document.createElement("img");
-    mouthPiece.src = "../assets/face-04.png";
+    mouthPiece.src = "face-04.png";
     mouthPiece.style.position = "absolute";
     mouthPiece.style.top = "10%";
     mouthPiece.style.left = "0";
@@ -1350,7 +1350,7 @@ async function eventThree(done) {
   if (nose) {
     const body6 = nose.querySelector(".tab-body");
     const nosePiece = document.createElement("img");
-    nosePiece.src = "../assets/face-02.png";
+    nosePiece.src = "face-02.png";
     nosePiece.style.position = "absolute";
     nosePiece.style.top = "10%";
     nosePiece.style.left = "0";
