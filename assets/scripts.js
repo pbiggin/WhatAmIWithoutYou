@@ -136,7 +136,7 @@ function waitForBlur() {
   });
 }
 
-const bellAudio = new Audio("./././assets/bell.mp3");
+const bellAudio = new Audio("./assets/bell.mp3");
 bellAudio.preload = "auto";
 
 function callBack() {
