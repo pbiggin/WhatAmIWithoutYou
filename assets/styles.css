@@ -167,8 +167,8 @@ button > img {
     background-color: var(--accent-colour);
 }
 x
-#end-text {
-    font-size: 25pt;
+p#end-text {
+    font-size: 5vw;
     padding: 0;
     margin: auto 0 0 0;
     position: relative;
