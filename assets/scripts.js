@@ -515,10 +515,15 @@ const conclusionScript = [
   "without me",
 ];
 
-const img1 = document.createElement("img1");
-img1.style.backgroundImage = "assets/ICON-HAPPY";
-img1.style.backgroundPosition = "center";
-img1.style.backgroundSize = "cover";
+const dogImages = [
+  "assets/DOG1_PIXEL.png",
+  "assets/DOG2_PIXEL.png",
+  "assets/DOG3_PIXEL.png",
+  "assets/DOG4_PIXEL.png",
+  "assets/DOG5_PIXEL.png",
+];
+
+const randomDog = Math.floor(Math.random() * dogImages.length);
 
 /* events */
 
@@ -572,7 +577,19 @@ async function eventOne(done) {
 
     if (i === 1) {
       const tab2 = cloneTab("tab2");
-      tab2.appendChild(img1);
+
+      if (tab2) {
+        const cloneBody = tab2.querySelector(".tab-body");
+        cloneBody.innerHTML = "";
+
+        const dog = document.createElement("img");
+        dog.src = dogImages[randomDog];
+        dog.style.position = "absolute";
+        dog.style.left = "0";
+        dog.style.width = "100%";
+        dog.style.height = "100%";
+        cloneBody.appendChild(dog);
+      }
     }
   }
 
@@ -601,15 +618,40 @@ async function eventOne(done) {
       for (let i = 0; i < Event1Good.length; i++) {
         updateCardText(main, Event1Good[i]);
         await sleep(1000);
+
         updateCardText(main, "");
         await sleep(200);
+
         if (i < Event1Good.length - 1) {
           const newTabId = `tab${3 + i}`;
-          cloneTab(newTabId);
+
+          if (newTabId) {
+            const clonedTab = cloneTab(newTabId);
+
+            if (clonedTab) {
+              const cloneBody2 = clonedTab.querySelector(".tab-body");
+
+              cloneBody2.innerHTML = "";
+
+              const randomDog = Math.floor(Math.random() * dogImages.length);
+
+              const dog2 = document.createElement("img");
+              dog2.src = dogImages[randomDog];
+
+              dog2.style.position = "absolute";
+              dog2.style.left = "0";
+              dog2.style.top = "0";
+              dog2.style.width = "100%";
+              dog2.style.height = "100%";
+              dog2.style.objectFit = "cover";
+
+              cloneBody2.appendChild(dog2);
+            }
+          }
         }
+
         await sleep(1000);
       }
-
       updateCardText(main, "I'll put these away for now...");
       await sleep(2000);
       removeClones();
@@ -730,7 +772,7 @@ async function eventTwo(done) {
   file.style.position = "absolute";
   file.style.width = "7vh";
   file.style.height = "7vh";
-  file.style.zIndex = "1";
+  file.style.zIndex = "0";
   file.style.position = "relative";
 
   const mainRect = main.getBoundingClientRect();
@@ -796,7 +838,7 @@ async function eventTwo(done) {
     if (answer5Time >= 5 && answer5Time <= 10) {
       updateCardText(main, "You took a while to answer...");
       await sleep(2000);
-      updateCardText(main, "Were you thinking about me?");
+      updateCardText(main, "Were you thinking hard about me?");
       await sleep(2000);
       updateCardText(main, "");
       await sleep(200);
@@ -824,8 +866,8 @@ async function eventTwo(done) {
     }
   }
 
-  /* produce a timer which reacts to click */
-  /* produce a frame with user's text in it */
+  /* SCRATCHED: produce a timer which reacts to click */
+  /* SCRATCHED: produce a frame with user's text in it */
 
   if (
     answer5Value !== null &&
@@ -882,15 +924,17 @@ async function eventTwo(done) {
   );
 
   if (answer7 === "Yes") {
+    await sleep(200);
+    updateCardText(main, "excellent");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
     updateCardText(main, "...");
     await sleep(2000);
     updateCardText(main, "");
     await sleep(200);
-    updateCardText(main, "");
-    await sleep(2000);
-    updateCardText(main, "");
-    await sleep(200);
   } else if (answer7 === "No") {
+    await sleep(200);
     updateCardText(main, "...");
     await sleep(2000);
     updateCardText(main, "");
@@ -899,39 +943,66 @@ async function eventTwo(done) {
     await sleep(2000);
     updateCardText(main, "");
     await sleep(200);
-    await sleep(2000);
   } else {
-    updateCardText(main, "I can help you with that!");
+    await sleep(200);
+    updateCardText(main, "I can help, you know! Just depend on me!");
     await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
   }
 
   /* produces a yes / no calculator thing */
 
   const answer8 = await askQuestion(
-    "If given the choice, would you rely on technology to replace part of your life?",
+    "If given the choice, would you rely on technology to replace any part of your life?",
     ["Yes", "No", "I'm not sure"],
     main,
   );
 
   if (answer8 === "Yes") {
-    updateCardText(main, "option 1");
+    updateCardText(main, ":)");
     await sleep(2000);
+    updateCardText(main, "Perfect");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    techScore++;
   } else if (answer8 === "No") {
-    updateCardText(main, "option 2");
+    updateCardText(main, "...");
     await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    updateCardText(main, "...");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    techScore--;
   } else {
-    updateCardText(main, "option 3");
+    updateCardText(main, "..");
     await sleep(2000);
+    updateCardText(main, "Don't worry");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    updateCardText(main, "We can change that.");
+    await sleep(2000);
+    updateCardText(main, "");
+    await sleep(200);
+    techScore++;
   }
 
-  /* produce a yes / no calculator thing */
+  /* SCRATCHED: produce a yes / no calculator thing */
 
   if (techScore <= -2) {
     updateCardText(main, "...");
     await sleep(2500);
     updateCardText(main, "");
     await sleep(200);
-    updateCardText(main, "Why are you here?");
+    updateCardText(main, "Why don't you like me?");
+    await sleep(2500);
+    updateCardText(main, "");
+    await sleep(200);
+    updateCardText(main, "You don't seem to trust me....");
     await sleep(2500);
     updateCardText(main, "");
     await sleep(200);
@@ -944,6 +1015,10 @@ async function eventTwo(done) {
     await sleep(2500);
     updateCardText(main, "");
     await sleep(200);
+    updateCardText(main, "I just... Can't get you?");
+    await sleep(2500);
+    updateCardText(main, "");
+    await sleep(200);
   } else {
     updateCardText(main, ":)");
     await sleep(2500);
@@ -952,13 +1027,15 @@ async function eventTwo(done) {
     updateCardText(main, "");
     await sleep(200);
     updateCardText(main, "I get the sense that you really like me?");
-    await sleep(1000);
+    await sleep(2000);
     updateCardText(main, "");
+    await sleep(200);
     updateCardText(main, "I mean. Technology.");
-    await sleep(1000);
+    await sleep(2000);
     updateCardText(main, "");
     await sleep(200);
   }
+  file.remove();
 
   if (typeof done === "function") done();
 }
@@ -996,7 +1073,7 @@ async function eventThree(done) {
 
   await waitForBlur();
   changeIcon("assets/ICON-SAD.png");
- 
+
   callBack();
   await waitForFocus();
   updateCardText("Stop that!");
@@ -1037,6 +1114,14 @@ async function eventThree(done) {
   await sleep(2000);
   updateCardText("");
   await sleep(200);
+  updateCardText("just...");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
+  updateCardText("Stay here");
+  await sleep(2000);
+  updateCardText("");
+  await sleep(200);
 
   /* starts getting mad */
 
@@ -1063,10 +1148,12 @@ async function eventThree(done) {
   await sleep(2000);
   updateCardText("");
   await sleep(200);
+  messageEl.classList.replace("loudest", "louder");
   updateCardText("LEAVING.");
   await sleep(2000);
   updateCardText("");
   await sleep(200);
+  messageEl.classList.replace("louder", "loudest");
   updateCardText("!!!");
   await sleep(2000);
   updateCardText("");
@@ -1141,7 +1228,7 @@ async function eventThree(done) {
     eyeFrame.style.width = "100%";
     eyeFrame.style.height = "100%";
     eyeFrame.style.pointerEvents = "none";
-    eyeFrame.style.zIndex = "10";
+    eyeFrame.style.zIndex = "11";
 
     body.appendChild(eyeFrame);
   }

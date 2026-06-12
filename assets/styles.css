@@ -40,6 +40,7 @@ body {
     background-repeat: no-repeat;
     background-position-y: bottom;
     height: 98vh;
+    border: 2px solid var(--primary-colour);
 }
 
 .content {
@@ -76,7 +77,7 @@ body {
     width: 300px;
     height: 300px;
     cursor: grab;
-    z-index: 5;
+    z-index: 10;
 }
 
 .tab{
@@ -88,15 +89,15 @@ body {
   height: auto;
   background-color: var(--tab-colour);
   overflow: hidden;
-  z-index: 5;
   justify-content: center;
 }
 
 .choice-buttons {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 
@@ -108,7 +109,7 @@ body {
     background-color: var(--accent-colour);
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
-    z-index: 20;
+    z-index: 12;
 }
 
 .spoken {
@@ -116,7 +117,7 @@ body {
 }
 
 
-button {
+button, input {
   font-family: "Silkscreen", sans-serif;
   align-content: center;
   justify-content: center;
@@ -137,7 +138,7 @@ button > img {
 }
 
 .good-btn, .bad-btn, .option-btn, .start-btn, .button-options {
-    margin: auto;
+    margin: 10px;
     align-self: center;
     justify-self: center;
     
