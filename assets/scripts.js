@@ -1049,17 +1049,14 @@ async function eventThree(done) {
   await sleep(2000);
   updateCardText("");
   await sleep(200);
-  await waitForBlur();
   updateCardText("just...");
   await sleep(2000);
   updateCardText("");
   await sleep(200);
-  await waitForBlur();
   updateCardText("stay here, on the page.");
   await sleep(2000);
   updateCardText("");
   await sleep(200);
-  await waitForBlur();
   updateCardText("stay with me.");
   await waitForBlur();
 
