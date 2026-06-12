@@ -77,7 +77,7 @@ body {
     width: 300px;
     height: 300px;
     cursor: grab;
-    z-index: 10;
+    z-index: 12;
 }
 
 .tab{
@@ -90,6 +90,7 @@ body {
   background-color: var(--tab-colour);
   overflow: hidden;
   justify-content: center;
+z-index: 9;
 }
 
 .choice-buttons {
@@ -124,6 +125,11 @@ button, input {
   border: 2px solid var(--primary-colour);
   border-radius: 10px;
   margin: 1vh;
+  background-color:var(--tab-colour);
+}
+
+button:hover {
+background-color:var(--accent-colour);
 }
 
 button.skip {
@@ -131,6 +137,11 @@ button.skip {
   width: 7vh;
   border: none;
   background-color: transparent;
+}
+
+
+button.skip:hover {
+    background-color:none;
 }
 
 button > img {
